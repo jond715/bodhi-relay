@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import com.leafbodhi.nostr.config.NostrConfig;
+import com.leafbodhi.nostr.config.NostrConfig.CreatedAtLimits;
 import com.leafbodhi.nostr.entity.Event;
 import com.leafbodhi.nostr.entity.MessageType;
 import com.leafbodhi.nostr.entity.Subscription;
@@ -65,6 +67,21 @@ public abstract class AbstractEventHandler implements IMessageHandler {
 	}
 
 	protected String canAcceptEvent(Event event) {
+		// TODO Event created_at Limits
+		CreatedAtLimits createdAtLimits = NostrConfig.getInstance().limits.eventLimits.createdAtLimits;
+		long now = System.currentTimeMillis() / 1000;
+		if (createdAtLimits.getMaxPositiveDelta() > 0
+				&& event.getCreatedAt().longValue() > now + createdAtLimits.getMaxPositiveDelta()) {
+			return "rejected: created_at is more than " + createdAtLimits.getMaxPositiveDelta()
+					+ " seconds in the future";
+		}
+		if (createdAtLimits.getMaxNegativeDelta() > 0
+				&& event.getCreatedAt().longValue() < now - createdAtLimits.getMaxNegativeDelta()) {
+
+			return "rejected: created_at is more than " + createdAtLimits.getMaxNegativeDelta()
+					+ " seconds in the past";
+		}
+
 		// TODO blacklist whitelist limit
 		return "";
 	}

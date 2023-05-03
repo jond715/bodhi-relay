@@ -19,14 +19,22 @@ public class ServerInfo {
 	@JsonProperty
 	private String contact = "lzq715@gmail.com";
 	@JsonProperty("supported_nips")
-	private final List<Integer> supportedNips = Arrays.asList(1, 2, 4, 9, 11, 12, 15, 16, 20, 25, 26, 28, 33, 40);
-	//TODO nips 22,42,111 (other:3,5,13,14,19,38,45,5,65)
-	
+	private final List<Integer> supportedNips = Arrays.asList(1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 25, 26, 28, 33, 40);
+	// TODO nips 42,111 (other:3,5,13,14,19,38,45,5,65)
+
 	@JsonProperty
 	private final String software = "https://github.com/jond715/bodhi-relay";
 	@JsonProperty
-	private final String version = "0.8.1";
-	
+	private final String version = "0.8.3";
+
+	private static ServerInfo SERVER_INFO = new ServerInfo();
+
+	public static ServerInfo getIntance() {
+		return SERVER_INFO;
+	}
+
+	private ServerInfo() {
+	}
 
 	@Override
 	public String toString() {

@@ -136,9 +136,12 @@ public class Event {
 	public boolean isExpiredEvent() {
 		if (this.tags.size() > 0)
 			return false;
+		Long expirationTime = this.getExpirationAt();
 
-		// TODO
-		return false;
+		if (expirationTime == 0) {
+			return false;
+		}
+		return expirationTime.longValue() <= System.currentTimeMillis() / 1000;
 	}
 
 	@JsonIgnore
@@ -190,10 +193,11 @@ public class Event {
 
 	@JsonIgnore
 	public Long getExpirationAt() {
-		Optional<Tag> opt = tags.stream().filter(t -> t.size() >= 2 && t.get(0).equals(EventTags.Expiration)).findFirst();
-		if(opt.isPresent()) {
+		Optional<Tag> opt = tags.stream().filter(t -> t.size() >= 2 && t.get(0).equals(EventTags.Expiration))
+				.findFirst();
+		if (opt.isPresent()) {
 			return Long.valueOf(opt.get().get(1));
-		}else {
+		} else {
 			return 0l;
 		}
 	}
