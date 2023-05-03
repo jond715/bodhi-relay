@@ -111,7 +111,6 @@ public class EventServiceImpl implements IEventService {
 		if (filter.getUntil() != null && filter.getUntil() > 0) {
 			filterWrapper.le("created_at", filter.getUntil());
 		}
-		// TODO filter tag E P , filter
 		if (filter.getETags() != null && filter.getETags().size() > 0) {
 
 			filterWrapper.and(wrapper -> {
@@ -130,6 +129,16 @@ public class EventServiceImpl implements IEventService {
 				});
 			});
 		}
+		
+		if (filter.getRTags() != null && filter.getRTags().size() > 0) {
+			filterWrapper.and(wrapper -> {
+				filter.getRTags().stream().forEach(r -> {
+					String rtag = "[\"r\",\"" + r + "\"]";
+					wrapper.like("tags", rtag).or();
+				});
+			});
+		}
+		
 
 		if (filter.getLimit() != null && filter.getLimit() > 0) {
 			filterWrapper.last("limit " + filter.getLimit());

@@ -36,6 +36,24 @@ public class Filter {
      */
     @JsonProperty("#p")
     private List<String> pTags;
+    
+    /**
+     * a list of references that are referenced in a "r" tag 
+     */
+    @JsonProperty("#r")
+    private List<String> rTags;
+    
+    /**
+     * a list of geohashs that are referenced in a "g" tag 
+     */
+    @JsonProperty("#g")
+    private List<String> gTags;
+    
+    /**
+     * a list of Hashtags that are referenced in a "t" tag 
+     */
+    @JsonProperty("#t")
+    private List<String> tTags;
 
     /**
      * a timestamp, events must be newer than this to pass

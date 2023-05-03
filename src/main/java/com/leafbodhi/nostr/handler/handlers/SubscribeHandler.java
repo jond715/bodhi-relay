@@ -28,14 +28,17 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * 
  * filter is a JSON object that determines what events will be sent in that
- * subscription, it can have the following attributes: { "ids": <a list of event
- * ids or prefixes>, "authors": <a list of pubkeys or prefixes, the pubkey of an
- * event must be one of these>, "kinds": <a list of a kind numbers>, "#e": <a
- * list of event ids that are referenced in an "e" tag>, "#p": <a list of
- * pubkeys that are referenced in a "p" tag>, "since": <an integer unix
- * timestamp, events must be newer than this to pass>, "until": <an integer unix
- * timestamp, events must be older than this to pass>, "limit": <maximum number
- * of events to be returned in the initial query> }
+ * subscription, it can have the following attributes: 
+ * { 
+ * "ids": <a list of event ids or prefixes>, 
+ * "authors": <a list of pubkeys or prefixes, the pubkey of an event must be one of these>, 
+ * "kinds": <a list of a kind numbers>, 
+ * "#e": <a list of event ids that are referenced in an "e" tag>, 
+ * "#p": <a list of pubkeys that are referenced in a "p" tag>, 
+ * "since": <an integer unix timestamp, events must be newer than this to pass>, 
+ * "until": <an integer unix timestamp, events must be older than this to pass>, 
+ * "limit": <maximum number of events to be returned in the initial query> 
+ * }
  * 
  * @author Jond
  *
@@ -104,7 +107,7 @@ public class SubscribeHandler implements ISubscribeHandler {
 		}
 
 		subscribers.get(session).add(new Subscription(subscriptionId, filter));
-		
+
 		// TODO check limit
 
 		return "";

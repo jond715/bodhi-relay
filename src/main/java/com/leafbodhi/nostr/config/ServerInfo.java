@@ -15,11 +15,13 @@ public class ServerInfo {
 	@JsonProperty
 	private String description = "A Nostr Relay written in Java";
 	@JsonProperty
-	private String pubkey = "";
+	private String pubkey = "45bd25c8648da487c573144f481db102ca23fd502e0b503ec90eb7ba451e327b";
 	@JsonProperty
 	private String contact = "lzq715@gmail.com";
 	@JsonProperty("supported_nips")
-	private final List<Integer> supportedNips = Arrays.asList(1, 2, 4, 9, 11, 15, 16, 20, 25, 26, 28, 33, 40);
+	private final List<Integer> supportedNips = Arrays.asList(1, 2, 4, 9, 11, 12, 15, 16, 20, 25, 26, 28, 33, 40);
+	//TODO nips 22,42,111 (other:3,5,13,14,19,38,45,5,65)
+	
 	@JsonProperty
 	private final String software = "https://github.com/jond715/bodhi-relay";
 	@JsonProperty
