@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import com.leafbodhi.nostr.config.NostrConfig;
 import com.leafbodhi.nostr.entity.Event;
 import com.leafbodhi.nostr.entity.Subscription;
 import com.leafbodhi.nostr.handler.IEventStrategy;
@@ -31,6 +32,9 @@ public class BasicEventHandler extends AbstractEventHandler {
 
 	@Autowired
 	private IEventService eventService;
+	
+	@Autowired
+	private NostrConfig nostrConfig;
 
 	@Override
 	public void handle(Session session, Event event, Map<Session, List<Subscription>> subscribers) {
@@ -90,5 +94,11 @@ public class BasicEventHandler extends AbstractEventHandler {
 			log.error("handle event error", e);
 		}
 	}
+	@Override
+	public NostrConfig getConfig() {
+		return nostrConfig;
+	}
+	
+	
 
 }

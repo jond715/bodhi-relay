@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import com.leafbodhi.nostr.config.NostrConfig;
 import com.leafbodhi.nostr.config.NostrConfig.CreatedAtLimits;
 import com.leafbodhi.nostr.entity.Event;
 import com.leafbodhi.nostr.entity.MessageType;
@@ -35,11 +34,14 @@ public abstract class AbstractEventHandler implements IMessageHandler {
 		for (Session session : subscribers.keySet()) {
 			var subscriptions = subscribers.get(session);
 			subscriptions.parallelStream().forEach(sub -> {
-				var filterCopy = sub.getFilter().copy();
-				if (filterCopy.isMatch(event)) {
-					session.getAsyncRemote()
-							.sendObject(new EventMessage(MessageType.EVENT.name(), sub.getSubscriptionId(), event));
-				}
+				var filters = sub.getFilters();
+
+				filters.parallelStream().forEach(filter -> {
+					if (filter.isMatch(event)) {
+						session.getAsyncRemote()
+								.sendObject(new EventMessage(MessageType.EVENT.name(), sub.getSubscriptionId(), event));
+					}
+				});
 			});
 		}
 	}
@@ -68,7 +70,7 @@ public abstract class AbstractEventHandler implements IMessageHandler {
 
 	protected String canAcceptEvent(Event event) {
 		// TODO Event created_at Limits
-		CreatedAtLimits createdAtLimits = NostrConfig.getInstance().limits.eventLimits.createdAtLimits;
+		CreatedAtLimits createdAtLimits = getConfig().getLimits().getEventLimits().getCreatedAtLimits();
 		long now = System.currentTimeMillis() / 1000;
 		if (createdAtLimits.getMaxPositiveDelta() > 0
 				&& event.getCreatedAt().longValue() > now + createdAtLimits.getMaxPositiveDelta()) {

@@ -1,3 +1,34 @@
-spring: 
- profiles:
-  active: dev
+#log level
+logging:
+ level:
+  root: debug
+
+spring:
+ datasource: 
+  url: jdbc:sqlite:/data/nostr/relay.db
+  driver-class-name: org.sqlite.JDBC
+  # username: 选用 sqlite 数据库不需要配置此项
+  # password: 选用 sqlite 数据库不需要配置此项
+ sql:
+  init:
+   schema-locations: classpath:db/schema.sql
+   mode: always
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: com.leafbodhi.nostr.model
+
+
+#nostr config
+nostr:
+ info:
+  name: bodhi-relay
+  description: A Nostr Relay written in Java
+  pubkey: 45bd25c8648da487c573144f481db102ca23fd502e0b503ec90eb7ba451e327b
+  contact: lzq715@gmail.com
+ config:
+  limits:
+   eventLimits:
+    createdAtLimits:
+     maxNegativeDelta: 172800
+     maxPositiveDelta: 1200

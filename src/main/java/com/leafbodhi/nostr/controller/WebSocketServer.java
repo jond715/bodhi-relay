@@ -10,8 +10,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -42,10 +40,8 @@ import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Service
 @Component
 @ServerEndpoint(value = "/", encoders = { MessageEncoder.class })
-@RestController
 public class WebSocketServer {
 
 	private static BasicEventHandler basicEventHandler;
@@ -69,13 +65,15 @@ public class WebSocketServer {
 
 	@OnOpen
 	public void onOpen(Session session) {
+		session.getContainer();
+		session.getProtocolVersion();
 		log.info("WebSocketServer receive new connection: " + session.getId() + ", message.toString:"
 				+ session.toString());
 		subscribers.put(session, new ArrayList<Subscription>());
 	}
 
 	@OnClose
-	public void onclose(Session session) {
+	public void onClose(Session session) {
 		log.info("connection close!");
 		subscribers.remove(session);
 	}
@@ -131,7 +129,7 @@ public class WebSocketServer {
 
 	private void handleRequest(Session session, SubscribeEventsIn message) throws IOException, EncodeException {
 		log.info(message.toString());
-		subscribeHandler.handle(session, message.getSubscriptionId(), message.getFilter(), subscribers);
+		subscribeHandler.handle(session, message.getSubscriptionId(), message.getFilters(), subscribers);
 
 	}
 

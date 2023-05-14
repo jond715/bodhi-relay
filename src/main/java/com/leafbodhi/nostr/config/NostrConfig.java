@@ -2,32 +2,31 @@ package com.leafbodhi.nostr.config;
 
 import java.util.List;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
 import com.leafbodhi.nostr.entity.MessageType;
 
 import lombok.Data;
 
 /**
- * TODO setting info
+ * setting info
  * 
  * @author Jond
  *
  */
 @Data
+@Component
+@ConfigurationProperties(prefix = "nostr.config")
 public class NostrConfig {
 
 	public Network network;
 	public Worker workers;
 	public Limits limits;
-	
-	private static NostrConfig NOSTR_CONFIG = new NostrConfig();
 
-	private NostrConfig() {
+	public NostrConfig() {
 		// TODO load config file
 		limits = new Limits();
-	}
-
-	public static NostrConfig getInstance() {
-		return NOSTR_CONFIG;
 	}
 
 	public class Network {
@@ -38,6 +37,7 @@ public class NostrConfig {
 	public class Worker {
 		public int count;
 	}
+	@Data
 	public class Limits {
 		public ConnectionLimits connectionLimits;
 		public ClientLimits clientLimits;
@@ -54,7 +54,8 @@ public class NostrConfig {
 	public class ClientLimits {
 		public ClientSubscriptionLimits subscription;
 	}
-
+	
+	@Data
 	public class EventLimits {
 		public CreatedAtLimits createdAtLimits = new CreatedAtLimits();
 	}

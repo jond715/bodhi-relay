@@ -10,6 +10,6 @@ import jakarta.websocket.Session;
 
 public interface ISubscribeHandler {
 	
-	public void handle(Session session,String subscriptionId, Filter filter,Map<Session, List<Subscription>> subscribers);
+	public void handle(Session session,String subscriptionId, List<Filter> filters,Map<Session, List<Subscription>> subscribers);
 
 }

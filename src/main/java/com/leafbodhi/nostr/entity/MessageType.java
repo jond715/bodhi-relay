@@ -21,28 +21,33 @@ package com.leafbodhi.nostr.entity;
 public enum MessageType {
 	
 
-	/** request type */
-	EVENT("EVENT"),
-	REQ("REQ"),
-    CLOSE("CLOSE"),
+	EVENT("EVENT","IN/OUT"),
+	
+	REQ("REQ","IN"),
     
-    /** response type */
-    NOTICE("NOTICE"),
+	CLOSE("CLOSE","IN"),
+    
+    NOTICE("NOTICE","OUT"),
     /** nip-15 */
-    EOSE("EOSE"),
+    EOSE("EOSE","OUT"),
     /** nip-20 */
-    OK("OK"),
+    OK("OK","OUT"),
     /** nip-42 */
-    AUTH("AUTH"),
+    AUTH("AUTH", "IN/OUT"),
     /** nip-45 */
-    COUNT("COUNT");
+    COUNT("COUNT","IN/OUT`");
     
     private final String messageType;
-    private MessageType(String messageType) {
+    private final String description;
+    private MessageType(String messageType,String description) {
         this.messageType = messageType;
+        this.description = description;
     }
     public String getValue() {
         return messageType;
+    }
+    public String getDescription() {
+    	return description;
     }
 
 }

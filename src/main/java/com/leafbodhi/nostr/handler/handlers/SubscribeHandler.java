@@ -51,12 +51,12 @@ public class SubscribeHandler implements ISubscribeHandler {
 	IEventService eventService;
 
 	@Override
-	public void handle(Session session, String subscriptionId, Filter filter,
+	public void handle(Session session, String subscriptionId, List<Filter> filters,
 			Map<Session, List<Subscription>> subscribers) {
 
-		String reason = canSubscribe(session, subscriptionId, filter, subscribers);
+		String reason = canSubscribe(session, subscriptionId, filters, subscribers);
 		if (StringUtils.hasLength(reason)) {
-			log.debug("subscription {} with {} rejected: {}", subscriptionId, filter, reason);
+			log.debug("subscription {} with {} rejected: {}", subscriptionId, filters, reason);
 			try {
 				session.getBasicRemote()
 						.sendObject(new OkMessage(subscriptionId, false, "Subscription rejected:" + reason));
@@ -66,30 +66,29 @@ public class SubscribeHandler implements ISubscribeHandler {
 			return;
 		}
 
-		fetchAndSend(session, subscriptionId, filter);
+		fetchAndSend(session, subscriptionId, filters);
 
 	}
 
-	private void fetchAndSend(Session session, String subscriptionId, Filter filter) {
-		log.debug("fetching events for subscription {} with filters {}", subscriptionId, filter);
+	private void fetchAndSend(Session session, String subscriptionId, List<Filter> filters) {
+		log.debug("fetching events for subscription {} with filters {}", subscriptionId, filters);
 
 		try {
-			List<EventModel> findEvents = eventService.findByFilters(filter);
-
-			if (findEvents != null && findEvents.size() > 0) {
-
-				List<Event> eventList = findEvents.stream().parallel().filter(e -> e != null).map(e -> {
-					return EventWrapper.modelToObj(e);
-				}).collect(Collectors.toList());
-
-				for (Event event : eventList) {
-					session.getAsyncRemote()
-							.sendObject(new EventMessage(MessageType.EVENT.name(), subscriptionId, event));
+			filters.parallelStream().forEach(filter->{
+				List<EventModel> findEvents = eventService.findByFilters(filter);
+				
+				if (findEvents != null && findEvents.size() > 0) {
+					List<Event> eventList = findEvents.stream().parallel().filter(e -> e != null).map(e -> {
+						return EventWrapper.modelToObj(e);
+					}).collect(Collectors.toList());
+					
+					for (Event event : eventList) {
+						session.getAsyncRemote()
+						.sendObject(new EventMessage(MessageType.EVENT.name(), subscriptionId, event));
+					}
 				}
-
-			} else {
-				session.getBasicRemote().sendObject(new EOSEMessage(subscriptionId));
-			}
+			});
+			session.getBasicRemote().sendObject(new EOSEMessage(subscriptionId));
 		} catch (IOException | EncodeException e) {
 			log.error("fetchAndSend " + subscriptionId, e);
 		}
@@ -97,16 +96,16 @@ public class SubscribeHandler implements ISubscribeHandler {
 		// TODO broadcast
 	}
 
-	private String canSubscribe(Session session, String subscriptionId, Filter filter,
+	private String canSubscribe(Session session, String subscriptionId, List<Filter> filters,
 			Map<Session, List<Subscription>> subscribers) {
 		List<Subscription> existingSubscription = subscribers.get(session);
 
-		if (existingSubscription.size() > 0 && existingSubscription.stream().filter(s -> s.getFilter().equals(filter))
+		if (existingSubscription.size() > 0 && existingSubscription.stream().filter(s -> s.getFilters().equals(filters))
 				.collect(Collectors.toList()).size() > 0) {
 			return "Duplicate subscription " + subscriptionId + ": Ignorning";
 		}
 
-		subscribers.get(session).add(new Subscription(subscriptionId, filter));
+		subscribers.get(session).add(new Subscription(subscriptionId, filters));
 
 		// TODO check limit
 

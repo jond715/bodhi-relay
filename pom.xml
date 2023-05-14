@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.leafbodhi.nostr</groupId>
 	<artifactId>bodhi-relay</artifactId>
-	<version>0.8.1</version>
+	<version>0.8.4</version>
 	<name>dosome-relay</name>
 	<description>A Nostr relay written in Java</description>
 	<properties>
@@ -37,12 +37,14 @@
 			<artifactId>mybatis-plus-boot-starter</artifactId>
 			<version>3.5.3.1</version>
 		</dependency>
-		<!--
+		<!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-boot-starter-test -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jdbc</artifactId>
+		    <groupId>com.baomidou</groupId>
+		    <artifactId>mybatis-plus-boot-starter-test</artifactId>
+		    <version>3.5.3.1</version>
+		    <scope>test</scope>
 		</dependency>
-		-->
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -61,6 +63,11 @@
 			<artifactId>javaee-api</artifactId>
 			<version>7.0</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 	<build>

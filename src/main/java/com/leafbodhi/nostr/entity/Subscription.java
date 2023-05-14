@@ -1,15 +1,17 @@
 package com.leafbodhi.nostr.entity;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
 public class Subscription {
 
 	private String subscriptionId;
-	private Filter filter;
+	private List<Filter> filters;
 
-	public Subscription(String subscriptionId, Filter filter) {
+	public Subscription(String subscriptionId, List<Filter> filters) {
 		this.subscriptionId = subscriptionId;
-		this.filter = filter;
+		this.filters = filters;
 	}
 }

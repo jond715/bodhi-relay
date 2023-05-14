@@ -21,6 +21,8 @@ public class HttpController {
 	private HttpServletRequest req;
 	@Autowired
 	private HttpServletResponse resp;
+	@Autowired
+	private ServerInfo serverInfo;
 
 	private final String DEFAULT_ACCEPT = "application/nostr+json";
 
@@ -30,9 +32,9 @@ public class HttpController {
 			            "description": "A Nostr Relay written in Java",
 			            "pubkey": "45bd25c8648da487c573144f481db102ca23fd502e0b503ec90eb7ba451e327b",
 			            "contact": "lzq715@gmail.com",
-			            "supported_nips": [1, 11],
+			            "supported_nips": [1],
 			            "software": "https://github.com/jond715/bodhi-relay",
-			            "version": "0.8.1"
+			            "version": "0.8.4"
 			        }
 			""";
 
@@ -50,7 +52,7 @@ public class HttpController {
 
 			var objectMapper = new ObjectMapper();
 			try {
-				response = objectMapper.writeValueAsString(ServerInfo.getIntance());
+				response = objectMapper.writeValueAsString(serverInfo);
 			} catch (JsonProcessingException e) {
 				log.warn("Error during response serialization.", e);
 				log.warn("Using default NIP-11 response.");
