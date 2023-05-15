@@ -1,189 +1,190 @@
 package com.leafbodhi.nostr.entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Data;
 
 @Data
 public class Filter {
-    /**
-     * a list of event ids or prefixes
-     */
-    private List<String> ids;
+	/**
+	 * a list of event ids or prefixes
+	 */
+	private List<String> ids;
 
-    /**
-     * a list of pubkeys or prefixes, the pubkey of an event must be one of these
-     */
-    private List<String> authors;
+	/**
+	 * a list of pubkeys or prefixes, the pubkey of an event must be one of these
+	 */
+	private List<String> authors;
 
-    /**
-     * a list of a kind numbers
-     */
-    private List<Integer> kinds;
+	/**
+	 * a list of a kind numbers
+	 */
+	private List<Integer> kinds;
 
-    /**
-     * a list of event ids that are referenced in an "e" tag
-     */
-    @JsonProperty("#e")
-    private List<String> eTags;
+	/**
+	 * a list of tags that are referenced in an "*" tag
+	 */
+	private Map<String, List<String>> tags;
 
-    /**
-     * a list of pubkeys that are referenced in a "p" tag
-     */
-    @JsonProperty("#p")
-    private List<String> pTags;
-    
-    /**
-     * a list of references that are referenced in a "r" tag 
-     */
-    @JsonProperty("#r")
-    private List<String> rTags;
-    
-    /**
-     * a list of geohashs that are referenced in a "g" tag 
-     */
-    @JsonProperty("#g")
-    private List<String> gTags;
-    
-    /**
-     * a list of Hashtags that are referenced in a "t" tag 
-     */
-    @JsonProperty("#t")
-    private List<String> tTags;
+	/**
+	 * a timestamp, events must be newer than this to pass
+	 */
+	private Long since;
 
-    /**
-     * a timestamp, events must be newer than this to pass
-     */
-    private Long since;
+	/**
+	 * a timestamp, events must be older than this to pass
+	 */
+	private Long until;
 
-    /**
-     * a timestamp, events must be older than this to pass
-     */
-    private Long until;
+	/**
+	 * maximum number of events to be returned in the initial query
+	 */
+	private Integer limit;
 
-    /**
-     * maximum number of events to be returned in the initial query
-     */
-    private Integer limit;
+	public Filter copy() {
+		var copy = new Filter();
+		if (this.ids != null) {
+			copy.ids = List.copyOf(this.ids);
+		}
+		if (this.authors != null) {
+			copy.authors = List.copyOf(this.authors);
+		}
+		if (this.kinds != null) {
+			copy.kinds = List.copyOf(this.kinds);
+		}
+		if (this.tags != null) {
+			copy.tags = Map.copyOf(this.tags);
+		}
+		copy.since = this.since;
+		copy.until = this.until;
+		copy.limit = this.limit;
 
-    public List<String> getAllTagsWithKey() {
-        var e = eTags.stream().map(t -> "e#" + t).collect(Collectors.toList());
-        var p = pTags.stream().map(t -> "p#" + t).collect(Collectors.toList());
-        var allTags = new ArrayList<String>();
-        allTags.addAll(e);
-        allTags.addAll(p);
-        return allTags;
-    }
+		return copy;
+	}
 
-    public Filter copy() {
-        var copy = new Filter();
-        if (this.ids != null) {
-            copy.ids = List.copyOf(this.ids);
-        }
-        if (this.authors != null) {
-            copy.authors = List.copyOf(this.authors);
-        }
-        if (this.kinds != null) {
-            copy.kinds = List.copyOf(this.kinds);
-        }
-        if (this.eTags != null) {
-            copy.eTags = List.copyOf(this.eTags);
-        }
-        if (this.pTags != null) {
-            copy.pTags = List.copyOf(this.pTags);
-        }
-        copy.since = this.since;
-        copy.until = this.until;
-        copy.limit = this.limit;
+	@Override
+	public String toString() {
+		return "Filter [ids=" + ids + ", authors=" + authors + ", kinds=" + kinds + ", tags=" + tags + ", since="
+				+ since + ", until=" + until + ", limit=" + limit + "]";
+	}
 
-        return copy;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		return this.toString().equals(obj.toString());
+	}
 
-    @Override
-    public String toString() {
-        return "Filter [ids=" + ids + ", authors=" + authors + ", kinds=" + kinds + ", eTags=" + eTags + ", pTags="
-                + pTags + ", since=" + since + ", until=" + until + ", limit=" + limit + "]";
-    }
-    @Override
-    public boolean equals(Object obj) {
-    	return this.toString().equals(obj.toString());
-    }
-    @Override
-    public int hashCode() {
-    	return this.toString().hashCode();
-    }
-    
-    public boolean isMatch(Event event) {
-        boolean hasMatch = false;
+	@Override
+	public int hashCode() {
+		return this.toString().hashCode();
+	}
 
-        ids:
-        if (ids != null && !ids.isEmpty()) {
-            var eventId = event.getId();
-            for (var id : ids) {
-                if (id.isEmpty()) {
-                    continue;
-                }
-                if (eventId.startsWith(id)) {
-                    hasMatch = true;
-                    break ids;
-                }
-            }
-            return false;
-        }
+	public boolean isMatch(Event event) {
+		boolean hasMatch = false;
 
-        authors:
-        if (authors != null && !authors.isEmpty()) {
-            var eventAuthor = event.getPubkey();
-            for (var author : authors) {
-                if (author.isEmpty()) {
-                    continue;
-                }
-                if (eventAuthor.startsWith(author)) {
-                    hasMatch = true;
-                    break authors;
-                }
-            }
-            return false;
-        }
+		ids: if (ids != null && !ids.isEmpty()) {
+			var eventId = event.getId();
+			for (var id : ids) {
+				if (id.isEmpty()) {
+					continue;
+				}
+				if (eventId.startsWith(id)) {
+					hasMatch = true;
+					break ids;
+				}
+			}
+			return false;
+		}
 
-        kinds:
-        if (kinds != null && !kinds.isEmpty()) {
-            var eventKind = event.getKind();
-            for (var kind : kinds) {
-                if (eventKind == kind) {
-                    hasMatch = true;
-                    break kinds;
-                }
-            }
-            return false;
-        }
-        
-        //TODO etags check
+		authors: if (authors != null && !authors.isEmpty()) {
+			var eventAuthor = event.getPubkey();
+			for (var author : authors) {
+				if (author.isEmpty()) {
+					continue;
+				}
+				if (eventAuthor.startsWith(author)) {
+					hasMatch = true;
+					break authors;
+				}
+			}
+			return false;
+		}
 
-        if (since != null) {
-            if (event.getCreatedAt() > since) {
-                return false;
-            }
-            hasMatch = true;
-        }
+		kinds: if (kinds != null && !kinds.isEmpty()) {
+			var eventKind = event.getKind();
+			for (var kind : kinds) {
+				if (eventKind == kind) {
+					hasMatch = true;
+					break kinds;
+				}
+			}
+			return false;
+		}
 
-        if (until != null) {
-            if (event.getCreatedAt() < until) {
-                return false;
-            }
-            hasMatch = true;
-        }
+		// TODO tags check
 
-        return hasMatch;
-    }
-    
-    public String toJsonString() {
-    	//TODO
-    	return "[]";
-    }
-    
+		if (since != null) {
+			if (event.getCreatedAt() > since) {
+				return false;
+			}
+			hasMatch = true;
+		}
+
+		if (until != null) {
+			if (event.getCreatedAt() < until) {
+				return false;
+			}
+			hasMatch = true;
+		}
+
+		return hasMatch;
+	}
+
+	public String toJsonString() {
+		// TODO
+		return "[]";
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static Filter jsonToObj(JsonNode node) {
+		ObjectMapper mapper = new ObjectMapper();
+		Filter f = new Filter();
+		Iterator<String> it = node.fieldNames();
+		while(it.hasNext()) {
+			String key = it.next();
+			if(key.equals("ids")) {
+				f.setIds(mapper.convertValue(node.get(key),List.class));
+			}else if(key.equals("kinds")) {
+				f.setKinds(mapper.convertValue(node.get("kinds"),List.class));
+			}else if(key.equals("since")) {
+				f.setSince(node.get("since").asLong());
+			}else if(key.equals("until")) {
+				f.setUntil(node.get("until").asLong() );
+			}else if(key.equals("authors")) {
+				f.setAuthors(mapper.convertValue(node.get("authors"),List.class));
+			}else if(key.equals("limit")) {
+				f.setLimit(node.get("limit").asInt());
+			}else if(key.startsWith("#") && key.length()>1 ) {
+				Map<String, List<String>> tags = new HashMap<>();
+				String keyValue = key.substring(1);
+				List<String> values = new ArrayList<>();
+				values = mapper.convertValue(node.get(key), List.class);
+				tags.put(keyValue, values);
+				f.setTags(tags);
+			}
+		}
+		return f ;
+	}
+	
+	public static String objToJson(Filter filter) {
+		//TODO
+		return null;
+	}
+
 }

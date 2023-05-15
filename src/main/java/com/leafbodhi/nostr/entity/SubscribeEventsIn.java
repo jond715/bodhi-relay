@@ -40,7 +40,7 @@ public class SubscribeEventsIn implements IncomingMessage {
 		List<Filter> tempFilters = new ArrayList<>();
 
 		for (int i = 2; i < node.size(); i++) {
-			Filter filter = mapper.convertValue(node.get(i), Filter.class);
+			Filter filter = Filter.jsonToObj(node.get(i));
 			tempFilters.add(filter);
 		}
 		in.setFilters(tempFilters);

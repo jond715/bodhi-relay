@@ -18,7 +18,6 @@ import com.leafbodhi.nostr.config.MessageEncoder;
 import com.leafbodhi.nostr.entity.Event;
 import com.leafbodhi.nostr.entity.MessageType;
 import com.leafbodhi.nostr.entity.PublishEventIn;
-import com.leafbodhi.nostr.entity.RequestEventsOut;
 import com.leafbodhi.nostr.entity.SubscribeEventsIn;
 import com.leafbodhi.nostr.entity.Subscription;
 import com.leafbodhi.nostr.entity.UnsubscribeIn;
@@ -51,7 +50,7 @@ public class WebSocketServer {
 
 	public static final ByteBuffer HEARTBEAT = ByteBuffer.wrap("heartbeat".getBytes());
 
-	private ObjectMapper mapper = new ObjectMapper();
+	private static ObjectMapper OBJECTMAPPER = new ObjectMapper();
 
 	private Map<Session, List<Subscription>> subscribers = new ConcurrentHashMap<>();
 
@@ -89,7 +88,7 @@ public class WebSocketServer {
 		log.info("NostrRelay get connect：" + session.getId() + "，get message：" + message);
 		JsonNode node;
 		try {
-			node = mapper.readTree(message);
+			node = OBJECTMAPPER.readTree(message);
 		} catch (JsonProcessingException e) {
 			log.error("message is not a valid JSON format", e);
 			return;
@@ -155,34 +154,6 @@ public class WebSocketServer {
 	private void handleUnknown(Session session, String message) {
 		// ignore
 		log.error("ignore unknown message: {}" ,message);
-	}
-
-	private void sendEvents(List<RequestEventsOut> events) {
-		events.stream().forEach(event -> {
-
-			Session mySession = getSessionForSubscriptionId(event.getSubscriptionId());
-			if (mySession == null) {
-				return;
-			}
-
-			try {
-				var jsonOut = mapper.writeValueAsString(event);
-				mySession.getAsyncRemote().sendText(jsonOut);
-			} catch (JsonProcessingException e) {
-				log.error("error on serialization of Event", e);
-			}
-		});
-	}
-
-	private Session getSessionForSubscriptionId(String subscriptionId) {
-		for (Session session : subscribers.keySet()) {
-			var subscriptions = subscribers.get(session);
-			if (subscriptions.stream().anyMatch(s -> s.getSubscriptionId().equals(subscriptionId))) {
-				return session;
-			}
-		}
-
-		return null;
 	}
 
 }

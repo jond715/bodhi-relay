@@ -26,7 +26,7 @@ public class ServerInfo {
 	@JsonProperty
 	private String software = "https://github.com/jond715/bodhi-relay";
 	@JsonProperty
-	private String version = "0.8.4";
+	private String version = "0.8.5";
 
 	@JsonProperty
 	private String pubkey;

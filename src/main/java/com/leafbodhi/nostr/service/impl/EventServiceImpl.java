@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leafbodhi.nostr.entity.Event;
+import com.leafbodhi.nostr.entity.EventTags;
 import com.leafbodhi.nostr.entity.Filter;
 import com.leafbodhi.nostr.handler.wrapper.EventWrapper;
 import com.leafbodhi.nostr.mapper.EventMapper;
@@ -111,34 +112,23 @@ public class EventServiceImpl implements IEventService {
 		if (filter.getUntil() != null && filter.getUntil() > 0) {
 			filterWrapper.le("created_at", filter.getUntil());
 		}
-		if (filter.getETags() != null && filter.getETags().size() > 0) {
 
-			filterWrapper.and(wrapper -> {
-				filter.getETags().stream().forEach(e -> {
-					String etag = "[\"e\",\"" + e + "\"]";
-					wrapper.like("tags", etag).or();
-				});
-			});
+		if (filter.getTags() != null && filter.getTags().size() > 0) {
+			for (String tagKey : filter.getTags().keySet()) {
+				if (EventTags.Event.equals(tagKey) || EventTags.Pubkey.equals(tagKey)
+						|| EventTags.Reference.equals(tagKey) || EventTags.Deduplication.equals(tagKey)) {
+					List<String> tagValues = filter.getTags().get(tagKey);
+					filterWrapper.and(wrapper -> {
+						tagValues.stream().forEach(t -> {
+							String tagStr = "[\"" + tagKey + "\",\"" + t + "\"]";
+							wrapper.like("tags", tagStr).or();
+						});
+					});
+				} else {
+					// TODO
+				}
+			}
 		}
-
-		if (filter.getPTags() != null && filter.getPTags().size() > 0) {
-			filterWrapper.and(wrapper -> {
-				filter.getPTags().stream().forEach(p -> {
-					String ptag = "[\"p\",\"" + p + "\"]";
-					wrapper.like("tags", ptag).or();
-				});
-			});
-		}
-		
-		if (filter.getRTags() != null && filter.getRTags().size() > 0) {
-			filterWrapper.and(wrapper -> {
-				filter.getRTags().stream().forEach(r -> {
-					String rtag = "[\"r\",\"" + r + "\"]";
-					wrapper.like("tags", rtag).or();
-				});
-			});
-		}
-		
 
 		if (filter.getLimit() != null && filter.getLimit() > 0) {
 			filterWrapper.last("limit " + filter.getLimit());
