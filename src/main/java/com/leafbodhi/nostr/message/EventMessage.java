@@ -16,7 +16,7 @@ public class EventMessage implements IMessage {
 	}
 
 	@Override
-	public String toString() {
+	public String encode() {
 		return "[\"" + messageType + "\",\"" + subscriptionId + "\"," + event.toJson() + "]";
 	}
 }

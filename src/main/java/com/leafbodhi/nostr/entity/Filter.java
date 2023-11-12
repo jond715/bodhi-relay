@@ -119,7 +119,7 @@ public class Filter {
 		kinds: if (kinds != null && !kinds.isEmpty()) {
 			var eventKind = event.getKind();
 			for (var kind : kinds) {
-				if (eventKind == kind) {
+				if ( eventKind.equals(kind) ) {
 					hasMatch = true;
 					break kinds;
 				}
@@ -158,18 +158,18 @@ public class Filter {
 		Iterator<String> it = node.fieldNames();
 		while(it.hasNext()) {
 			String key = it.next();
-			if(key.equals("ids")) {
+			if("ids".equals(key)) {
 				f.setIds(mapper.convertValue(node.get(key),List.class));
-			}else if(key.equals("kinds")) {
-				f.setKinds(mapper.convertValue(node.get("kinds"),List.class));
-			}else if(key.equals("since")) {
-				f.setSince(node.get("since").asLong());
-			}else if(key.equals("until")) {
-				f.setUntil(node.get("until").asLong() );
-			}else if(key.equals("authors")) {
-				f.setAuthors(mapper.convertValue(node.get("authors"),List.class));
-			}else if(key.equals("limit")) {
-				f.setLimit(node.get("limit").asInt());
+			}else if("kinds".equals(key)) {
+				f.setKinds(mapper.convertValue(node.get(key),List.class));
+			}else if("since".equals(key)) {
+				f.setSince(node.get(key).asLong());
+			}else if("until".equals(key)) {
+				f.setUntil(node.get(key).asLong() );
+			}else if("authors".equals(key)) {
+				f.setAuthors(mapper.convertValue(node.get(key),List.class));
+			}else if("limit".equals(key)) {
+				f.setLimit(node.get(key).asInt());
 			}else if(key.startsWith("#") && key.length()>1 ) {
 				Map<String, List<String>> tags = new HashMap<>();
 				String keyValue = key.substring(1);

@@ -14,7 +14,7 @@ public class NoticeMessage implements IMessage {
 	}
 
 	@Override
-	public String toString() {
+	public String encode() {
 		return "[\"" + messageType + ",\"" + message + "\"]";
 	}
 

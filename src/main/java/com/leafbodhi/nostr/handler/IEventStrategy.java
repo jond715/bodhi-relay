@@ -7,6 +7,6 @@ package com.leafbodhi.nostr.handler;
  */
 public interface IEventStrategy {
 
-	public int excute();
+	public int execute();
 	
 }

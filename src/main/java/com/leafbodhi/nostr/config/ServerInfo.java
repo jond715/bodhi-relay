@@ -22,17 +22,24 @@ public class ServerInfo {
 	@JsonProperty("supported_nips")
 	private List<Integer> supportedNips = Arrays.asList(1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 25, 26, 28, 33, 40);
 	// TODO nips 42,111 (other:3,5,13,14,19,38,45,5,65)
-	
+
 	@JsonProperty
 	private String software = "https://github.com/jond715/bodhi-relay";
 	@JsonProperty
-	private String version = "0.8.5";
+	private String version;
 
 	@JsonProperty
 	private String pubkey;
+
 	@JsonProperty
 	private String contact;
+
+	@JsonProperty("payment_url")
+	private String paymentUrl;
 	
+	@JsonProperty("limitation")
+	private Limitation limitation = new Limitation();
+
 	@Override
 	public String toString() {
 		return "Server{" + "name='" + name + '\'' + ", description='" + description + '\'' + ", pubkey='" + pubkey

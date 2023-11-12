@@ -1,7 +1,7 @@
 package com.leafbodhi.nostr.handler.wrapper;
 
 import com.leafbodhi.nostr.entity.Event;
-import com.leafbodhi.nostr.model.EventModel;
+import com.leafbodhi.nostr.db.model.EventModel;
 
 public class EventWrapper {
 

@@ -1,9 +1,12 @@
 #log level
 logging:
  level:
-  root: debug
+  root: info
 
 spring:
+ thymeleaf:
+  prefix: classpath:/static/
+  suffix: .html
  datasource: 
   url: jdbc:sqlite:/data/nostr/relay.db
   driver-class-name: org.sqlite.JDBC
@@ -26,6 +29,7 @@ nostr:
   description: A Nostr Relay written in Java
   pubkey: 45bd25c8648da487c573144f481db102ca23fd502e0b503ec90eb7ba451e327b
   contact: lzq715@gmail.com
+  version: "@project.version@"
  config:
   limits:
    eventLimits:

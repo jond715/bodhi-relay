@@ -14,7 +14,7 @@ import com.leafbodhi.nostr.entity.Subscription;
 import com.leafbodhi.nostr.handler.IEventStrategy;
 import com.leafbodhi.nostr.handler.factory.EventStrategyFactory;
 import com.leafbodhi.nostr.message.OkMessage;
-import com.leafbodhi.nostr.service.IEventService;
+import com.leafbodhi.nostr.db.service.IEventService;
 
 import jakarta.websocket.EncodeException;
 import jakarta.websocket.Session;
@@ -75,7 +75,7 @@ public class BasicEventHandler extends AbstractEventHandler {
 			IEventStrategy eventStrategy = EventStrategyFactory.createStrategy(event, eventService);
 			int count = 0;
 			try {
-				count = eventStrategy.excute();
+				count = eventStrategy.execute();
 			} catch (Exception e) {
 				e.printStackTrace();
 				log.error("error handling message", e.getLocalizedMessage());

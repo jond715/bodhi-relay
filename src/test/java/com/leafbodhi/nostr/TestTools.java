@@ -2,6 +2,7 @@ package com.leafbodhi.nostr;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.io.JsonStringEncoder;
@@ -20,6 +21,8 @@ public class TestTools {
 
 //		testContentEscape();
 //		testTagTojson();
+
+		System.out.println(UUID.randomUUID());
 		
 	}
 	

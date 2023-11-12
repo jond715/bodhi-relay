@@ -7,7 +7,7 @@ import com.leafbodhi.nostr.handler.strategies.DeletionEventStrategy;
 import com.leafbodhi.nostr.handler.strategies.EphemeralEventStrategy;
 import com.leafbodhi.nostr.handler.strategies.ParameterizedReplaceableEventStrategy;
 import com.leafbodhi.nostr.handler.strategies.ReplaceableEventStrategy;
-import com.leafbodhi.nostr.service.IEventService;
+import com.leafbodhi.nostr.db.service.IEventService;
 
 public class EventStrategyFactory {
 	

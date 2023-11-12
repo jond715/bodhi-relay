@@ -12,8 +12,8 @@ public class MessageEncoder implements Encoder.Text<IMessage> {
 	
 	@Override
     public String encode(IMessage message) throws EncodeException {
-		log.debug("response message:" + message.toString());
-        return message.toString();
+		log.debug("response message:" + message.encode());
+        return message.encode();
     }
 
     @Override

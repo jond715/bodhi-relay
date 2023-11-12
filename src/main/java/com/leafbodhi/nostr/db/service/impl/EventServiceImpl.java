@@ -1,4 +1,4 @@
-package com.leafbodhi.nostr.service.impl;
+package com.leafbodhi.nostr.db.service.impl;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ import com.leafbodhi.nostr.entity.Event;
 import com.leafbodhi.nostr.entity.EventTags;
 import com.leafbodhi.nostr.entity.Filter;
 import com.leafbodhi.nostr.handler.wrapper.EventWrapper;
-import com.leafbodhi.nostr.mapper.EventMapper;
-import com.leafbodhi.nostr.model.EventModel;
-import com.leafbodhi.nostr.service.IEventService;
+import com.leafbodhi.nostr.db.mapper.EventMapper;
+import com.leafbodhi.nostr.db.model.EventModel;
+import com.leafbodhi.nostr.db.service.IEventService;
 
 @Component
 public class EventServiceImpl implements IEventService {

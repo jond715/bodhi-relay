@@ -1,4 +1,4 @@
-package com.leafbodhi.nostr.model;
+package com.leafbodhi.nostr.db.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;

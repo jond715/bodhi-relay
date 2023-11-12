@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.leafbodhi.nostr.entity.Event;
 import com.leafbodhi.nostr.handler.IEventStrategy;
-import com.leafbodhi.nostr.service.IEventService;
+import com.leafbodhi.nostr.db.service.IEventService;
 
 public class DeletionEventStrategy extends AbstractStrategy implements IEventStrategy {
 
@@ -14,7 +14,7 @@ public class DeletionEventStrategy extends AbstractStrategy implements IEventStr
 	}
 
 	@Override
-	public int excute() {
+	public int execute() {
 		List<String> eventIdsToDelete =  new ArrayList<>();
 		getEvent().getTags().stream().forEach(e->{
 			eventIdsToDelete.add(e.getTagValue());

@@ -4,6 +4,9 @@ import com.leafbodhi.nostr.entity.Filter;
 import com.leafbodhi.nostr.entity.IMessage;
 import com.leafbodhi.nostr.entity.MessageType;
 
+/**
+ * @author Jond
+ */
 public class SubscriptionMessage implements IMessage {
 	private final String messageType;
 	private final String subscriptionId;
@@ -16,7 +19,7 @@ public class SubscriptionMessage implements IMessage {
 	}
 
 	@Override
-	public String toString() {
+	public String encode() {
 		return "[\"" + messageType + "\",\"" + subscriptionId + ",\"" + filter.toJsonString() + "\"]";
 	}
 }

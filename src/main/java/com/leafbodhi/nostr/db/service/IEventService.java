@@ -1,10 +1,10 @@
-package com.leafbodhi.nostr.service;
+package com.leafbodhi.nostr.db.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.leafbodhi.nostr.entity.Event;
 import com.leafbodhi.nostr.entity.Filter;
-import com.leafbodhi.nostr.model.EventModel;
+import com.leafbodhi.nostr.db.model.EventModel;
 
 import java.util.List;
 

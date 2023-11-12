@@ -134,8 +134,9 @@ public class Event {
 
 	@JsonIgnore
 	public boolean isExpiredEvent() {
-		if (this.tags.size() > 0)
+		if (this.tags.size() > 0) {
 			return false;
+		}
 		Long expirationTime = this.getExpirationAt();
 
 		if (expirationTime == 0) {
@@ -198,7 +199,7 @@ public class Event {
 		if (opt.isPresent()) {
 			return Long.valueOf(opt.get().get(1));
 		} else {
-			return 0l;
+			return 0L;
 		}
 	}
 

@@ -18,7 +18,7 @@ public class OkMessage implements IMessage {
 	}
 
 	@Override
-	public String toString() {
+	public String encode() {
 		return "[\"" + messageType + "\",\"" + eventId + "\"," + flag + ",\"" + message + "\"]";
 	}
 	

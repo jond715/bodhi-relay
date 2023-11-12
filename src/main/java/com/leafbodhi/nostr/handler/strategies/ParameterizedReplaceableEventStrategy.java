@@ -2,7 +2,7 @@ package com.leafbodhi.nostr.handler.strategies;
 
 import com.leafbodhi.nostr.entity.Event;
 import com.leafbodhi.nostr.handler.IEventStrategy;
-import com.leafbodhi.nostr.service.IEventService;
+import com.leafbodhi.nostr.db.service.IEventService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,7 +14,7 @@ public class ParameterizedReplaceableEventStrategy extends AbstractStrategy impl
 	}
 
 	@Override
-	public int excute() {
+	public int execute() {
 		log.debug("received parameterized replaceable event: {}", this.getEvent());
 		return getEventService().saveOrUpdate(this.getEvent());
 	}

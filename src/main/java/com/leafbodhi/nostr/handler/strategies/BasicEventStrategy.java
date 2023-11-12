@@ -2,7 +2,7 @@ package com.leafbodhi.nostr.handler.strategies;
 
 import com.leafbodhi.nostr.entity.Event;
 import com.leafbodhi.nostr.handler.IEventStrategy;
-import com.leafbodhi.nostr.service.IEventService;
+import com.leafbodhi.nostr.db.service.IEventService;
 
 public class BasicEventStrategy extends AbstractStrategy implements IEventStrategy {
 
@@ -11,7 +11,7 @@ public class BasicEventStrategy extends AbstractStrategy implements IEventStrate
 	}
 
 	@Override
-	public int excute() {
+	public int execute() {
 		return getEventService().save(this.getEvent());
 	}
 

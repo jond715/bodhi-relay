@@ -18,8 +18,8 @@ import com.leafbodhi.nostr.handler.wrapper.EventWrapper;
 import com.leafbodhi.nostr.message.EOSEMessage;
 import com.leafbodhi.nostr.message.EventMessage;
 import com.leafbodhi.nostr.message.OkMessage;
-import com.leafbodhi.nostr.model.EventModel;
-import com.leafbodhi.nostr.service.IEventService;
+import com.leafbodhi.nostr.db.model.EventModel;
+import com.leafbodhi.nostr.db.service.IEventService;
 
 import jakarta.websocket.EncodeException;
 import jakarta.websocket.Session;

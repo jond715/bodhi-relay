@@ -27,3 +27,7 @@ replay_pid*
 /.settings/
 /.classpath
 /.project
+/.dbeaver/
+/.idea/
+/.idea/*.xml
+
